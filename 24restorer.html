@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha256-xaF9RpdtRxzwYMWg4ldJoyPWqyDPCRD0Cv7YEEe6Ie8=" crossorigin="anonymous"></script>
+    <script src="mnemonic-phrase.min.js"></script>
+    <script src="https://cdn.nimiq.com/nimiq.js"></script>
+
+    <title>24 words restorer</title>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Tools</a>
+    </nav>
+    <div class="container">
+        <h1>24 words restorer</h1>
+        <div class="alert alert-danger" role="alert">
+            <p>Use this site in an offline enviroment only. One way to do so is to open this page in a private browser window, disable your network connection after it is loaded, use it as long as you want, close the window and reenable your network connection after it. This ensures that there is no way to send data to a third party server or store it on your local device<p>Not doing so may lead to a loast private key if someone manages to modify this page.<p>In general, keep your 24 words as secure as possible
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control wordInput" />
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="target">Target wallett address</label>
+                    <input class="form-control" id="target" placeholder="(optional) print only results that matches this address"/>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="scramble" disabled="disabled">
+                  <label class="form-check-label" for="scramble">
+                    Try all positions for the missing word
+                  </label>
+                </div>
+
+                <button class="btn btn-primary" type="button" onclick="startSearch()">Go</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <ul class="list-group" id="log">
+            <li class="list-group-item">Log</li>
+        </ul>
+    </div>
+
+    <script>
+        Nimiq.init();
+
+        function addMessage(msg) {
+            let log = document.getElementById("log");
+            let item = document.createElement("li");
+            item.setAttribute("class", "list-group-item");
+            item.innerHTML = msg;
+            log.appendChild(item);
+        }
+
+        function clearOutput() {
+            document.getElementById("log").innerHTML = '<li class="list-group-item">Log</li>';
+        }
+
+        function startSearch() {
+            clearOutput();
+
+            let words = $('.wordInput').map((i,w) => w.value).get();
+            let target = $('#target').val();
+
+            let error = false;
+            let notSet = 0;
+            let openIndex = -1;
+
+            words.forEach((word, i) => {
+                if(word === "") {
+                    notSet++;
+                    openIndex = i;
+                    return;
+                }
+                if(MnemonicPhrase.DEFAULT_WORDLIST.indexOf(word) === -1) {
+                    addMessage(`Unknown word ${word}`);
+                    error = true;
+                }
+            });
+
+            if(notSet > 1) {
+                addMessage('To many unknown words');
+                error = true;
+            }
+
+            if(notSet === 0) {
+                addMessage(wordsToAddress(words));
+                error = true;
+            }
+
+            if(!error) {
+                for (let i = 0; i < MnemonicPhrase.DEFAULT_WORDLIST.length; i++) {
+                    words[openIndex] = MnemonicPhrase.DEFAULT_WORDLIST[i];
+                    let address = wordsToAddress(words);
+                    if(address && !target) {
+                        addMessage(`Found address ${address} using ${words[openIndex]}`);
+                    }
+                    if (address === target) {
+                        addMessage(`Missing word found: ${words[openIndex]}`);
+                        break;
+                    }
+                }
+                addMessage("Done");
+            }
+        }
+
+        function wordsToAddress(words) {
+            try {
+                let pkHex = MnemonicPhrase.mnemonicToKey(words.join(' '));
+                let key = new Nimiq.PrivateKey(Nimiq.BufferUtils.fromHex(pkHex));
+
+                const keyPair = Nimiq.KeyPair.derive(key);
+
+                return Nimiq.Address.fromHash(keyPair.publicKey.hash()).toUserFriendlyAddress()
+            } catch (e) {
+                return;
+            }
+
+        }
+    </script>
+</body>
